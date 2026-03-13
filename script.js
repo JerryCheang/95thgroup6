@@ -24,10 +24,12 @@
   if (!root) return;
 
   const sectionNav = root.querySelector(".section-nav");
+  const navStack = root.querySelector(".nav-stack");
   const navLinks = sectionNav ? sectionNav.querySelectorAll('a[href^="#"]') : [];
+  const scrollTopBtn = root.querySelector(".scroll-top-btn");
   const getScrollOffset = () => {
-    if (!sectionNav) return 0;
-    return Math.ceil(sectionNav.getBoundingClientRect().height) + 12;
+    if (!navStack) return 0;
+    return Math.ceil(navStack.getBoundingClientRect().height) + 12;
   };
 
   const scrollToSection = (hash, behavior = "smooth", updateHash = true) => {
@@ -56,6 +58,20 @@
     setTimeout(() => {
       scrollToSection(window.location.hash, "auto", false);
     }, 0);
+  }
+
+  const toggleScrollTopBtn = () => {
+    if (!scrollTopBtn) return;
+    const shouldShow = window.scrollY > 240;
+    scrollTopBtn.classList.toggle("visible", shouldShow);
+  };
+
+  if (scrollTopBtn) {
+    scrollTopBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+    toggleScrollTopBtn();
+    window.addEventListener("scroll", toggleScrollTopBtn, { passive: true });
   }
 
   const lightbox = document.querySelector("#grp6-lightbox");
